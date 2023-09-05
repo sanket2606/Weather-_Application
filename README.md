@@ -2,7 +2,7 @@
 
 
 
-This is a simple Java application that provides weather information for Indian cities using the OpenWeatherMap API.
+This is a simple Java command-line application that provides weather information for Indian cities using the OpenWeatherMap API.
 
 ## Table of Contents
 
