@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 
 
 
+
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -136,7 +137,11 @@ public class Weather_App {
 				            }
 				            case 6:
 				            {
-				                // Code to handle Wind Information option
+				                // Code to handle Wind Information 
+				            	System.out.print("\nEnter the city name: ");
+				                Scanner sc = new Scanner(System.in);
+				                String city = sc.next();
+				            	displayWindInfo(getWeatherData(city));
 				                break;
 				            }
 				            case 7:
@@ -171,8 +176,8 @@ public class Weather_App {
 				            }
 				            case 8:
 				            {
-				                // Code to handle Current Air Pollution Data option
-				                break;
+				            	 displayAirPollution(getAirPollutionData());
+				             	break;
 				            }
 				            case 9:
 				            {
@@ -265,7 +270,7 @@ public class Weather_App {
 		    				 String cityName = jsonObject.getString("name");
 		    		            String description = jsonObject.getJSONArray("weather").getJSONObject(0).getString("description");
 		    		            double temperature = jsonObject.getJSONObject("main").getDouble("temp") - 273.15; // Convert from Kelvin to Celsius
-		    				
+		    				    
 
 		    		            System.out.println("\nWeather in " + cityName + ":");
 		    		            System.out.println("Description: " + description+ "");
@@ -273,6 +278,7 @@ public class Weather_App {
 		    		            System.out.println("Day  : "+getDay());
 		    		            System.out.println("Date : " +java.time.LocalDate.now()); 
 		    		            System.out.println("Time : " + java.time.LocalTime.now());
+		    		            
 		    		           
 		    		            
 		    			 }
@@ -639,8 +645,118 @@ public class Weather_App {
 		    	 }
 		    	        
 		    	        
+		    	 
+		    	 public static String getAirPollutionData() throws JSONException, Exception {
+			    	    try {
+			    	        // Prompt the user to enter the city name
+			    	        System.out.print("\nEnter the city name: ");
+			    	        Scanner sc = new Scanner(System.in);
+			    	        String city = sc.next();
+
+			    	        // Fetch current weather data for the specified city
+			    	        JSONObject jsonObject = new JSONObject(getWeatherData(city));
+
+			    	        // Extract latitude and longitude coordinates from the current weather data
+			    	        JSONObject coordObject = jsonObject.getJSONObject("coord");
+			    	        double latitude = (double) coordObject.get("lat");
+			    	        double longitude = (double) coordObject.get("lon");
+
+			    	        // Construct the API URL for retrieving five-day weather forecast dat
+			    	      
+
+			    	        // Construct the URL using variables
+			    	        String baseUrl = "https://api.openweathermap.org/data/2.5/air_pollution";
+			    	        String apiUrl = baseUrl + "?lat=" + latitude + "&lon=" + longitude + "&appid=" + API_KEY;
+
+			    	        URL url = new URL(apiUrl);
+			    	        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+			    	        try {
+			    	            // Read the response from the API and build a StringBuilder to store it
+			    	            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			    	            StringBuilder response = new StringBuilder();
+			    	            String line;
+
+			    	            while ((line = reader.readLine()) != null) {
+			    	                response.append(line);
+			    	            }
+
+			    	            // Return the JSON string containing the five-day weather forecast data
+			    	            return response.toString();
+			    	        } finally {
+			    	            // Ensure that the connection is closed, even in case of exceptions
+			    	            connection.disconnect();
+			    	        }
+			    	    } catch (Exception e) {
+			    	        // Handle exceptions related to API requests and JSON parsing
+			    	        e.printStackTrace();
+			    	        throw e; // Re-throw the exception for the caller to handle
+			    	    }
+			    	}
+     
 		    	        
-		    	     
+		    	 public static void displayAirPollution(String jsonData) {
+		    	        try {
+		    	            // Parse the JSON data
+		    	            JSONObject jsonObject = new JSONObject(jsonData);
+
+		    	            // Extract air pollution data
+		    	            JSONArray list = jsonObject.getJSONArray("list");
+		    	            if (list.length() > 0) {
+		    	                JSONObject pollutionData = list.getJSONObject(0);
+
+		    	                JSONObject components = pollutionData.getJSONObject("components");
+
+		    	                double co = components.getDouble("co");
+		    	                double no = components.getDouble("no");
+		    	                double no2 = components.getDouble("no2");
+		    	                double o3 = components.getDouble("o3");
+		    	                double so2 = components.getDouble("so2");
+		    	                double pm2_5 = components.getDouble("pm2_5");
+		    	                double pm10 = components.getDouble("pm10");
+		    	                double nh3 = components.getDouble("nh3");
+
+		    	                System.out.println("Air Pollution Data:");
+		    	                System.out.println("CO: " + co);
+		    	                System.out.println("NO: " + no);
+		    	                System.out.println("NO2: " + no2);
+		    	                System.out.println("O3: " + o3);
+		    	                System.out.println("SO2: " + so2);
+		    	                System.out.println("PM2.5: " + pm2_5);
+		    	                System.out.println("PM10: " + pm10);
+		    	                System.out.println("NH3: " + nh3);
+		    	            } else {
+		    	                System.out.println("No air pollution data found.");
+		    	            }
+		    	        } catch (Exception e) {
+		    	            e.printStackTrace();
+		    	        }
+		    	    }
+		    	 
+		    	 
+		    	 
+		    	 public static void displayWindInfo(String jsonData) {
+		    	        try {
+		    	            // Parse the JSON data
+		    	            JSONObject jsonObject = new JSONObject(jsonData);
+
+		    	            // Extract wind data
+		    	            JSONObject wind = jsonObject.getJSONObject("wind");
+
+		    	            double windSpeed = wind.getDouble("speed");
+		    	            double windDegree = wind.getDouble("deg");
+		    	            double windGust = wind.getDouble("gust");
+
+		    	            System.out.println("Wind Information:");
+		    	            System.out.println("Wind Speed: " + windSpeed + " m/s");
+		    	            System.out.println("Wind Degree: " + windDegree + " degrees");
+		    	            System.out.println("Wind Gust: " + windGust + " m/s");
+		    	        } catch (Exception e) {
+		    	            e.printStackTrace();
+		    	        }
+		    	    }
+
+
 
 
 
