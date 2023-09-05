@@ -26,8 +26,9 @@ This is a simple Java application that provides weather information for Indian c
 - **Humidity and Pressure**: Check the humidity percentage and atmospheric pressure for a city.
 - **Cloud Cover**: Find out the cloud cover percentage for a city.
 - **Sunrise and Sunset Times**: Get the times for sunrise and sunset in a city.
-- [Add more features here if applicable]
-
+- **Wind Information
+- **5-Day / 3-Hour Forecast
+- ** Current Air Pollution Data
 ## Getting Started
 
 These instructions will help you get the Weather App up and running on your local machine.
@@ -42,6 +43,7 @@ Before you begin, make sure you have the following software and resources instal
 
 - **OpenWeatherMap API Key:** The Weather App uses the OpenWeatherMap API to fetch weather data. You'll need to sign up for a free API key from the [OpenWeatherMap website](https://openweathermap.org/api) if you haven't already.
 - - JSON Libraries
+  
 
 ### JSON Libraries
 
@@ -76,6 +78,10 @@ To run this application, you'll need:
 
   3.Build the project:
   javac Weather_App.java
+
+  4.Run the Java Application:
+  java WeatherApp
+
 
 ## Contributors
 
