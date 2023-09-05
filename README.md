@@ -1,6 +1,6 @@
 # Weather App
 
-![Project Logo](link-to-your-logo.png) (if applicable)
+
 
 This is a simple Java application that provides weather information for Indian cities using the OpenWeatherMap API.
 
